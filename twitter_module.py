@@ -28,7 +28,7 @@ def get_all_tweets(screen_name):
     mediatweets = set()
     
     #make initial request for most recent tweets (200 is the maximum allowed count)
-    new_tweets = api.user_timeline(screen_name = screen_name,count=100)
+    new_tweets = api.user_timeline(screen_name = screen_name,count=50)
     
     #save most recent tweets
     alltweets.extend(new_tweets)
@@ -40,7 +40,7 @@ def get_all_tweets(screen_name):
     while len(new_tweets) > 0:
         
         #all subsiquent requests use the max_id param to prevent duplicates
-        new_tweets = api.user_timeline(screen_name = screen_name,count=100,max_id=oldest)
+        new_tweets = api.user_timeline(screen_name = screen_name,count=50,max_id=oldest)
         
         #save most recent tweets
         alltweets.extend(new_tweets)
@@ -62,11 +62,15 @@ def get_all_tweets(screen_name):
     print(len(alltweets))
     file.close()
     '''
+    print(len(alltweets))
+
     pictures = set()
 
     for tweet in alltweets:
         for media in tweet.entities.get("media",[{}]):
+            #get media from tweets
             if(media.get("type",None) == "photo"):
+                #ensures the media is a picture 
                 pic = tweet.entities.get('media',[])
                 pictures.add(pic[0]['media_url'])
 
@@ -78,11 +82,11 @@ def get_all_tweets(screen_name):
         mediatweets.add(pic[0]["media_url"]) """
 
 
-    
-    for picture in pictures:
 
-        wget.download(picture, "/Users/andrewstoycos/Documents/Classes_Fall_2018/EC601/Project_1/Mini_Project1/pic_downloads")
-    
+    for index, picture in enumerate(pictures):
+        wget.download(picture, ("/Users/andrewstoycos/Documents/Classes_Fall_2018/EC601/Project_1/Mini_Project1/pic_downloads/" + str(index + 1) + ".jpg"))
+        
+
 if __name__ == '__main__':
     #pass in the username of the account you want to download
-    get_all_tweets("@NatGeo")
+    get_all_tweets("@photoblggr")
