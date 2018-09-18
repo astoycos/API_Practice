@@ -3,9 +3,9 @@
 #Sources:
 #https://stackoverflow.com/questions/16211703/how-to-make-a-folder-in-python-mkdir-makedirs-doesnt-do-this-right
 #https://miguelmalvarez.com/2015/03/03/download-the-pictures-from-a-twitter-feed-using-python/
+#Prateek Mehta file tweetAPIexample 
 
-
-import tweepy #https://github.com/tweepy/tweepy
+import tweepy 
 import json
 import wget
 import os
@@ -54,21 +54,23 @@ def get_all_tweets(screen_name):
         oldest = alltweets[-1].id - 1
         if(len(alltweets) > 15):
             break
-        print("...%s tweets downloaded so far" % (len(alltweets)))
+        
     
-    print(len(alltweets))
+    print("%s tweets downloaded" % (len(alltweets)))
 
-
+    #create a set to hold all the tweets 
     pictures = set()
 
+    #loops though all the downloaded tweets 
     for tweet in alltweets:
-        #ensures the media is a picture 
+        
         pic = tweet.entities.get('media',[])
+        #pic attempts to grab picture, if there is a picture i.e len(pic) > 0  then it adds it to our set of media
         if(len(pic)>0):
             pictures.add(pic[0]['media_url'])
         else:
             continue
-
+    #creates a directory to store the media, if it already exists remove it and rewrite 
     if os.path.exists('pic_downloads') : 
         shutil.rmtree('pic_downloads') 
         os.mkdir('pic_downloads')
@@ -78,7 +80,7 @@ def get_all_tweets(screen_name):
     for index, picture in enumerate(pictures):
         wget.download(picture, ("pic_downloads/" + str(index) + ".jpg"))
         
-
+#can change account from which pictures are downloaded 
 if __name__ == '__main__':
     #pass in the username of the account you want to download
     get_all_tweets("@photoblggr")
