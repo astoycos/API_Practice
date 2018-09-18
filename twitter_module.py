@@ -1,10 +1,15 @@
 #!/usr/bin/env python
 # encoding: utf-8
+#Sources:
+#https://stackoverflow.com/questions/16211703/how-to-make-a-folder-in-python-mkdir-makedirs-doesnt-do-this-right
+#https://miguelmalvarez.com/2015/03/03/download-the-pictures-from-a-twitter-feed-using-python/
 
 
 import tweepy #https://github.com/tweepy/tweepy
 import json
 import wget
+import os
+import shutil
 
 
 #Twitter API credentials
@@ -28,7 +33,7 @@ def get_all_tweets(screen_name):
     mediatweets = set()
     
     #make initial request for most recent tweets (200 is the maximum allowed count)
-    new_tweets = api.user_timeline(screen_name = screen_name,count=50)
+    new_tweets = api.user_timeline(screen_name = screen_name,count=20)
     
     #save most recent tweets
     alltweets.extend(new_tweets)
@@ -40,7 +45,7 @@ def get_all_tweets(screen_name):
     while len(new_tweets) > 0:
         
         #all subsiquent requests use the max_id param to prevent duplicates
-        new_tweets = api.user_timeline(screen_name = screen_name,count=50,max_id=oldest)
+        new_tweets = api.user_timeline(screen_name = screen_name,count=20,max_id=oldest)
         
         #save most recent tweets
         alltweets.extend(new_tweets)
@@ -50,41 +55,28 @@ def get_all_tweets(screen_name):
         if(len(alltweets) > 15):
             break
         print("...%s tweets downloaded so far" % (len(alltweets)))
-    '''   
-    #write tweet objects to JSON
-    file = open('tweet.json', 'w') 
-    print("Writing tweet objects to JSON please wait...")
-    for status in alltweets:
-        json.dump(status._json,file,sort_keys = True,indent = 4)
     
-    #close the file
-    print("Done")
     print(len(alltweets))
-    file.close()
-    '''
-    print(len(alltweets))
+
 
     pictures = set()
 
     for tweet in alltweets:
-        for media in tweet.entities.get("media",[{}]):
-            #get media from tweets
-            if(media.get("type",None) == "photo"):
-                #ensures the media is a picture 
-                pic = tweet.entities.get('media',[])
-                pictures.add(pic[0]['media_url'])
+        #ensures the media is a picture 
+        pic = tweet.entities.get('media',[])
+        if(len(pic)>0):
+            pictures.add(pic[0]['media_url'])
+        else:
+            continue
 
-
-         
-
-    """if status.entities["media"][0]["type"] == "photo":
-        pic = status.entities.get("media", [])
-        mediatweets.add(pic[0]["media_url"]) """
-
-
+    if os.path.exists('pic_downloads') : 
+        shutil.rmtree('pic_downloads') 
+        os.mkdir('pic_downloads')
+    else:
+        os.mkdir('pic_downloads')
 
     for index, picture in enumerate(pictures):
-        wget.download(picture, ("/Users/andrewstoycos/Documents/Classes_Fall_2018/EC601/Project_1/Mini_Project1/pic_downloads/" + str(index + 1) + ".jpg"))
+        wget.download(picture, ("pic_downloads/" + str(index) + ".jpg"))
         
 
 if __name__ == '__main__':
