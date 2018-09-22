@@ -59,7 +59,7 @@ for pics in picfiles:
 			
 		font = ImageFont.truetype('Crimson-BoldItalic.ttf',30)
 		 
-		# Opening the file gg.png
+		# Opening the file gg.png	
 		imageFile = 'pic_downloads/' + pics
 		im1=Image.open(imageFile)
 		
@@ -67,12 +67,11 @@ for pics in picfiles:
 		basewidth = 600 
 		wpercent = (basewidth / float(im1.size[0]))
 		hsize = int((float(im1.size[1]) * float(wpercent)))
+		#ensures video dimensions are even for ffmpeg
+		if hsize % 2 == 1:
+			hsize = hsize + 1
+
 		im1 = im1.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
-		
-		try:		
-			im1.save('pic_downloads/' + pics)
-		except: 
-			os.remove('pic_downloads/' + pics)
 
 		# Drawing the text on the picture
 		draw = ImageDraw.Draw(im1)

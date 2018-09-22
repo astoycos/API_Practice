@@ -19,7 +19,7 @@ access_key = "1039252626829963270-fdMfABc65z4oTfh6t8WbHelgjrmONM"
 access_secret = "QbKfrq7J4uMv292kdIhQpZqbJvpuW49ZRILQCGJwFgxST"
 
 
-def get_all_tweets(screen_name):
+def get_all_tweets(screen_name, tweetnum):
     
     #Twitter only allows access to a users most recent 3240 tweets with this method
     
@@ -33,7 +33,7 @@ def get_all_tweets(screen_name):
     mediatweets = set()
     
     #make initial request for most recent tweets (200 is the maximum allowed count)
-    new_tweets = api.user_timeline(screen_name = screen_name,count=20)
+    new_tweets = api.user_timeline(screen_name = screen_name,count=(tweetnum/2))
     
     #save most recent tweets
     alltweets.extend(new_tweets)
@@ -45,7 +45,7 @@ def get_all_tweets(screen_name):
     while len(new_tweets) > 0:
         
         #all subsiquent requests use the max_id param to prevent duplicates
-        new_tweets = api.user_timeline(screen_name = screen_name,count=20,max_id=oldest)
+        new_tweets = api.user_timeline(screen_name = screen_name,count=(tweetnum/2),max_id=oldest)
         
         #save most recent tweets
         alltweets.extend(new_tweets)
@@ -54,23 +54,23 @@ def get_all_tweets(screen_name):
         oldest = alltweets[-1].id - 1
         if(len(alltweets) > 15):
             break
-        
     
-    print("%s tweets downloaded" % (len(alltweets)))
-
-    #create a set to hold all the tweets 
+    #create a set to hold all the media from the tweets 
     pictures = set()
 
     #loops though all the downloaded tweets 
     for tweet in alltweets:
         
         pic = tweet.entities.get('media',[])
-        #pic attempts to grab picture, if there is a picture i.e len(pic) > 0  then it adds it to our set of media
+        #pic attempts to grab picture, if there is a picture (i.e len(pic) > 0 ) then it adds it to our set of media
         if(len(pic)>0):
             pictures.add(pic[0]['media_url'])
         else:
             continue
-    #creates a directory to store the media, if it already exists remove it and rewrite 
+    
+    print("%s pictures found" % (len(pictures)))
+
+    #creates a folder to store the media in working directory, if it already exists remove it and rewrite 
     if os.path.exists('pic_downloads') : 
         shutil.rmtree('pic_downloads') 
         os.mkdir('pic_downloads')
@@ -82,5 +82,14 @@ def get_all_tweets(screen_name):
         
 #can change account from which pictures are downloaded 
 if __name__ == '__main__':
+    #user input for number of tweets to be downloaded
+    try:
+        numtweets = int(input("Enter number of tweets to be downloaded (Must be 20 or more): "))
+    except ValueError:
+        print('\nYou did not enter a valid number')
+        sys.exit(0)
     #pass in the username of the account you want to download
-    get_all_tweets("@photoblggr")
+    try:
+        get_all_tweets("@photoblggr", int(numtweets))
+    except:
+        print("Invalid twitter handle")
