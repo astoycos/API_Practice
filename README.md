@@ -25,4 +25,4 @@ The Project is Split into three modules and should be run in the following order
 # EXECUTION:
 In order to create a new video simply clone the github and run 1. Python twitter_module.py, 2. Python vision_module.py, and finally 3.Python ffmpeg_module.py 
 
-**The only erroneous files in the github are a font file for the labels and a Readme
+**The only erroneous files in the github are a .ttf font file for the labels and a Readme
