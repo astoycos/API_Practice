@@ -1,7 +1,8 @@
+#CopyRight 2018 Andrew Stoycos astoycos@bu.edu
+
 # coding: utf-8
 
-#export GOOGLE_APPLICATION_CREDENTIALS="/Users/andrewstoycos/Documents/Classes_Fall_2018/EC601/Project_1/Mini_Project1/miniproject1-3785356094c8.json"
-
+#Sources: 
 #https://stackoverflow.com/questions/6996603/delete-a-file-or-folder
 #http://www.xappsoftware.com/wordpress/2013/04/25/how-to-add-a-text-to-a-picture-using-python/
 #https://opensource.com/life/15/2/resize-images-python

@@ -1,4 +1,7 @@
 #!/usr/bin/env python
+
+#CopyRight 2018 Andrew Stoycos astoycos@bu.edu
+
 #Source
 #https://stackoverflow.com/questions/44947505/how-to-make-a-movie-out-of-images-in-python
 #https://stackoverflow.com/questions/6996603/delete-a-file-or-folder

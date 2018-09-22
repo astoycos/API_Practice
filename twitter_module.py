@@ -1,5 +1,9 @@
 #!/usr/bin/env python
+
+#CopyRight 2018 Andrew Stoycos astoycos@bu.edu
+
 # encoding: utf-8
+
 #Sources:
 #https://stackoverflow.com/questions/16211703/how-to-make-a-folder-in-python-mkdir-makedirs-doesnt-do-this-right
 #https://miguelmalvarez.com/2015/03/03/download-the-pictures-from-a-twitter-feed-using-python/
@@ -13,10 +17,10 @@ import shutil
 
 
 #Twitter API credentials
-consumer_key = "V7yRfImaW76l7x1YJlqZqugtx"
-consumer_secret = "5mHVgrxA280I97JVK0EpNluBIMBJK9p6FEMfvmeNND0pqxoy7n"
-access_key = "1039252626829963270-fdMfABc65z4oTfh6t8WbHelgjrmONM"
-access_secret = "QbKfrq7J4uMv292kdIhQpZqbJvpuW49ZRILQCGJwFgxST"
+consumer_key = 
+consumer_secret = 
+access_key = 
+access_secret = 
 
 
 def get_all_tweets(screen_name, tweetnum):
