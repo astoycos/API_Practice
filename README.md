@@ -10,9 +10,9 @@ The first module interacts with the twitter API using a python wrapper tweepy in
 
 # 2.vision_module.py
 The second module works by using the google vision API in order to find a list of labels for the pictures stored in 'pic_downloads' by the previous module.  It then uses the python API Pillow in order to resize all the images and caption them using the labels created from the google vision API.  It then resaves the images while also errorchecking the process
-	YOU MUST ENTER YOUR OWN GOOGLE API CREDENTIALS IN TERMINAL
-		- MAC---- export GOOGLE_APPLICATION_CREDENTIALS="[PATH]"
-		- PC----- $env:GOOGLE_APPLICATION_CREDENTIALS="[PATH]"
+YOU MUST ENTER YOUR OWN GOOGLE API CREDENTIALS IN TERMINAL
+- MAC---- export GOOGLE_APPLICATION_CREDENTIALS="[PATH]"
+- PC----- $env:GOOGLE_APPLICATION_CREDENTIALS="[PATH]"
 
 	Required add on Libraries: google-cloud-vision, Pillow 
 
