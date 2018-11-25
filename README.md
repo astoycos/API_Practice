@@ -1,4 +1,4 @@
-# Mini_Project1
+# Mini_Project3
 
 The Project is Split into three modules and should be run in the following order 
 
