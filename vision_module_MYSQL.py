@@ -10,6 +10,7 @@
 #https://pillow.readthedocs.io/en/3.0.x/reference/ImageDraw.html
 #https://www.w3schools.com/python/python_mysql_insert.asp
 
+
 import twitter_module 
 import io
 import os
