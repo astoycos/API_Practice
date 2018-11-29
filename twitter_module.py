@@ -17,10 +17,10 @@ import shutil
 
 
 #Twitter API credentials
-consumer_key = 
-consumer_secret = 
-access_key = 
-access_secret = 
+consumer_key = "vSX8opPxEjU9YO9ZkdSjPdenL"
+consumer_secret = "VAs6VGJ3k0bqkcSrbN20zYHSP7ARcBhGCbCRtT3qPYRnnIMywI"
+access_key = "1039252626829963270-W7Fd0uWMmiKCC7Ox1Mnp6oagw1mwrb"
+access_secret = "yhZNSiLnQ723qJmktKXBwUaMs0rVgNBDk0QcE90PN9lMW"
 
 
 def get_all_tweets(screen_name, tweetnum):
@@ -75,15 +75,24 @@ def get_all_tweets(screen_name, tweetnum):
     print("%s pictures found" % (len(pictures)))
 
     #creates a folder to store the media in working directory, if it already exists remove it and rewrite 
-    if os.path.exists('pic_downloads') : 
-        shutil.rmtree('pic_downloads') 
-        os.mkdir('pic_downloads')
+    if os.path.exists('pic_downloads/' + screen_name[1:]) : 
+        #shutil.rmtree('pic_downloads') 
+        #os.mkdir('pic_downloads'
+        pass
     else:
-        os.mkdir('pic_downloads')
+        os.makedirs('pic_downloads/' + screen_name[1:])
 
-    for index, picture in enumerate(pictures):
-        wget.download(picture, ("pic_downloads/" + str(index) + ".jpg"))
-        
+    for picture in pictures:
+        if os.path.exists('pic_downloads/' + screen_name[1:] + '/' + 'labeled_' + picture): 
+            #shutil.rmtree('pic_downloads')    
+            #os.mkdir('pic_downloads'
+            pass
+        else:
+            wget.download(picture, ('pic_downloads/' + screen_name[1:] + '/'))
+
+
+
+'''        
 #can change account from which pictures are downloaded 
 if __name__ == '__main__':
     #user input for number of tweets to be downloaded
@@ -97,3 +106,5 @@ if __name__ == '__main__':
         get_all_tweets("@photoblggr", int(numtweets))
     except:
         print("Invalid twitter handle")
+'''
+
