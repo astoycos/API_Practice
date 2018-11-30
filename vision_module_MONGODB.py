@@ -19,7 +19,8 @@ import io
 import os
 import PIL
 from tqdm import tqdm
-import mysql.connector
+import pymongo
+from bson.son import SON
 from getpass import getpass
 from PIL import ImageFont
 from PIL import Image
@@ -29,39 +30,19 @@ from google.cloud import vision
 from google.cloud.vision import types
 from prettytable import PrettyTable
 
-pic_directory = 'pic_directory_MYSQL/'
+pic_directory = 'pic_directory_MONGODB/'
 
 
-#make MYSQL DATAbase 
-username = str(raw_input("Enter your MySQL username: "))
+#make MONGODB DATAbase 
+user = str(raw_input("Enter Mongo_DB user name: "))
 
-incorrectpass = True
+myclient = pymongo.MongoClient('localhost', 27017)
 
-while(incorrectpass):
-	password = str(getpass("Enter your MySQl password: "))
+dblist = myclient.list_database_names()
 
-	database_name = username + "_mysql_twitter_db"
+dbname = user + '_mongo_twitter_db'
 
-	try:
-		mydb = mysql.connector.connect(
-			user=username,
-			passwd=password,
-			auth_plugin='mysql_native_password'
-		)
-		incorrectpass = False
-
-	except mysql.connector.errors.ProgrammingError:
-		incorrectpass = True
-
-mycursor = mydb.cursor()
-
-try: 
-    mycursor.execute("USE " + database_name)
-except mysql.connector.Error as err:
-	mycursor.execute("CREATE DATABASE IF NOT EXISTS " + database_name)
-
-mydb.commit()
-# Get tweets 
+mydb = myclient[dbname]
 
 #continue prompting the user to get tweets and entries to database 
 try:
@@ -75,25 +56,14 @@ try:
 			#pass in the username of the account you want to download
 
 		try:
-			twitter_module.get_all_tweets(tw_hdl, int(numtweets),True)
+			twitter_module.get_all_tweets(tw_hdl, int(numtweets),False)
 		except:
 			print("Invalid twitter handle")
 
 		#Make new table in database for 
 
-		mydb = mysql.connector.connect(
-			user=username,
-			passwd=password,
-			database=database_name,
-			auth_plugin='mysql_native_password'
-		)
-
-		mycursor = mydb.cursor()
-
-
-		mycursor.execute("CREATE TABLE IF NOT EXISTS " + tw_hdl[1:] + " (pic_filenames VARCHAR(255) PRIMARY KEY, pic_caption VARCHAR(255), pic_caption_weight VARCHAR(255))")
-
-		mydb.commit()
+	
+		mycol = mydb[tw_hdl[1:]]
 
 		# Instantiates a client
 		client = vision.ImageAnnotatorClient()
@@ -165,56 +135,26 @@ try:
 
 
 			#insert filename,caption, caption weight into database 
-			try:
-				values = (str(pics),str(labels[0].description),str(labels[0].score))
+			filter = {'filename':str(pics)}
+			entry = {'$set' : {'filename':str(pics),'pic_caption':str(labels[0].description),'pic_caption_weight':str(labels[0].score)}}
 
-				mycursor.execute("INSERT INTO " + tw_hdl[1:] + " (pic_filenames,pic_caption,pic_caption_weight) VALUES (%s, %s, %s)",values)
-
-				mydb.commit()
-			except mysql.connector.errors.IntegrityError:
-				pass
+			mycol.update_many(filter,entry,upsert=True)
 	print('\n')
+
 except EOFError:
 	# on exit show some database statistics
 	print('\n')
-	print("Below is your " + database_name +" and the various twitter handles that were queryed ")
-	
-	#print(mycursor.execute("SHOW TABLE STATUS"))
+	print("Below is your " + dbname +" and the various twitter handles that were queryed ")
 
-	mydb = mysql.connector.connect(
-			user=username,
-			passwd=password,
-			database=database_name,
-			auth_plugin='mysql_native_password'
-		)
-
-	mycursor = mydb.cursor()
-
-	my_pics = mydb.cursor()
-
-	my_des = mydb.cursor()
-
-	mycursor.execute("show tables")
-
-	tables = mycursor.fetchall()
+	collist = mydb.list_collection_names()
 
 	tab = PrettyTable(['Twitter_Handles', '# of Pictures','Most Popular descriptor (word,count)'])
 	
-	for (table_name,) in tables:
-		my_pics.execute('select * from ' + table_name)
-		
-		records = my_pics.fetchall()
-
-		my_des.execute('SELECT pic_caption, COUNT(pic_caption) AS value_occurrence FROM ' + table_name + ' GROUP BY pic_caption ORDER BY value_occurrence DESC LIMIT 1')
-
-		commons = my_des.fetchall()[0]
-
-		commons = (str(commons[0]),commons[1])
-
-		tab.add_row([str(table_name),str(my_pics.rowcount),str(commons)])
+	for handles in collist:
+		coll = mydb[str(handles)]
+		for most_used in coll.aggregate([{"$sortByCount":"$pic_caption"},{"$limit":1}]):
+			tab.add_row([str(coll.name),str(coll.count()),(str(most_used["_id"]),most_used["count"])])
 	
 	print tab
 	
-
-
 
