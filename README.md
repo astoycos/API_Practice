@@ -1,28 +1,63 @@
 # Mini_Project3
 
-The Project is Split into three modules and should be run in the following order 
+This project was used as a way of gaining experience with both APIs(twitter and google vision) and relational(MySQL) and nonrelational(MongoDB) databases. It downloads pictures from a specified twitter handle and then labels them using the google Vision API. Then it saves the pictutes and accompying data in local intances of both Mysql and Mongo databases. Finally the provided API creates some basic functions to query these databases.
 
-1.twitter_module.py
-	The first module interacts with the twitter API using a python wrapper tweepy in order to download the user entered number of tweets. It then pulls the pictures from the tweet objects and stores them in a new directory, "Pic_downloads". 
+This program was created using Python2.7, MySQL 8.0.13, and Mongo_DB 4.04
+
+## Module Descriptions
+
+### Prerequsites 
+
+All credentials must be your own i.e twitter and google vision keys. For tweepy they can be manually entered at the heady of twitter_module.py, for google vision the user must run the following command line 
+		
+	- MAC -> export GOOGLE_APPLICATION_CREDENTIALS="[PATH]"
+	- PC -> $env:GOOGLE_APPLICATION_CREDENTIALS="[PATH]" 
+
+The Project is split into three different modules, all add on python libaries can be installed using 
+	
+	PIP install <library>
+	
+	Required add on Libraries: 
+	tweepy
+	google-cloud-vision 
+	mysql-connector 
+	pymongo 
+	wget
+	shutil
+	Pillow
+	tqdm
+	prettytable
+	getpass
+	
+	
+	
+MySQL community server must be installed via the following [instructions](https://dev.mysql.com/doc/mysql-getting-started/en/)
+
+MongoDB must be installed and connected following these [instructions](https://docs.mongodb.com/manual/installation/#tutorial-installation)
+
+### twitter_module.py
+
+The first module interacts with the twitter API using a python wrapper,tweepy, in order to download the user entered number of tweets with the function "get_all_tweets()". It then pulls the pictures from the tweet objects and stores them in a new directory, "Pic_downloads_(mongo or mysql)/twitter_handle". If twitter handle is invalid it returns an error and propts the user to enter another one.  It is called by the other two modules.  
 	YOU MUST ENTER YOUR OWN TWITTER CREDENTIALS 
+	
 
-	Required add on Libraries: tweepy, wget
+### vision_module_MYSQL.py
 
-2.vision_module.py
-	The second module works by using the google vision API in order to find a list of labels for the pictures stored in 'pic_downloads' by the previous module.  It then uses the python API Pillow in order to resize all the images and caption them using the labels created from the google vision API.  It then resaves the images while also errorchecking the process
-	YOU MUST ENTER YOUR OWN GOOGLE API CREDENTIALS IN TERMINAL
-		- MAC -> export GOOGLE_APPLICATION_CREDENTIALS="[PATH]"
-		- PC -> $env:GOOGLE_APPLICATION_CREDENTIALS="[PATH]"
+This module prompts the user to enter their MySQL credentials, and creates a database with the name 'useername_mysql_twitter_db', and if correct asks for a twitter handle to query. If a valid handle is entered twitter_module.get_all_tweets() is called.  Once all the pictures are downloaded the google vision API finds a list of labels for the pictures stored in 'pic_downloads_mysql/'.  It then uses the python API Pillow in order to resize all the images and caption them using the labels created from the google vision API.  Following picture labeling, it creates a table called 'twitter handle' in the database, where the picture filenames, captions and caption confidences are stored. It will continue to prompt the user to enter twitter handles, and create new database entries until 'ctl-d' is hit. Finally the program will exit showing a quck summary reguarding the newly created database.
 
-	Required add on Libraries: google-cloud-vision, Pillow 
+	
 
-3.ffmpeg_module.py 
-	The finial module is relatively simple, it uses the a python subprocess to access the FFmpeg API, which then concatinates all the pictures into a video, 'tweet_video.mp4' that can be played with any video player.  It then deletes the directory 'pic_downloads' and all its children files 
+### vision_module_MONGODB.py 
+	
+This module prompts the user to enter a mongo database name, and creates a database with the name 'name_mongo_twitter_db', and if correct asks for a twitter handle to query. If a valid handle is entered twitter_module.get_all_tweets() is called.  Once all the pictures are downloaded the google vision API finds a list of labels for the pictures stored in 'pic_downloads_mongo/'.  It then uses the python API Pillow in order to resize all the images and caption them using the labels created from the google vision API.  Following picture labeling, it creates a collection called 'twitter handle' in the database, where the picture filenames, captions and caption confidences are stored as documents. It will continue to prompt the user to enter twitter handles, and create new database entries until 'ctl-d' is hit. Finally the program will exit showing a quck summary reguarding the newly created database.
 
-	Required add on Libraries: ffmpeg
+### API.py
+
+This module provides an API to interact with the databases created by twitter_module.py and vision_module_MYSQL.py. It contains two main funtions, show_info() which shows some quick statistics about a database, and find_des(description) which allows the user to search the database for a specific picture caption. If a picture is found with the description, it will print the twitter handle it was downloaded from and then display the image. 
+
+a quick demo is provided in demo.py 
 
 
-EXECUTION:
-In order to create a new video simply clone the github and run 1. Python twitter_module.py, 2. Python vision_module.py, and finally 3.Python ffmpeg_module.py 
+## DEMO
 
 **The only erroneous files in the github is a font file for the labels and a Readme
