@@ -2,11 +2,15 @@
 
 This project was used as a way of gaining experience with both APIs(twitter and google vision) and relational(MySQL) and nonrelational(MongoDB) databases. It downloads pictures from a specified twitter handle and then labels them using the google Vision API. Then it saves the pictutes and accompying data in local intances of both Mysql and Mongo databases. Finally the provided API creates some basic functions to query these databases.
 
-This program was created using Python2.7, MySQL 8.0.13, and Mongo_DB 4.04
-
 ## Module Descriptions
 
 ### Prerequsites 
+
+This program was created using Python2.7, MySQL 8.0.13, and Mongo_DB 4.04
+
+MySQL community server must be installed via the following [instructions](https://dev.mysql.com/doc/mysql-getting-started/en/)
+
+MongoDB must be installed and connected following these [instructions](https://docs.mongodb.com/manual/installation/#tutorial-installation)
 
 All credentials must be your own i.e twitter and google vision keys. For tweepy they can be manually entered at the heady of twitter_module.py, for google vision the user must run the following command line 
 		
@@ -28,12 +32,6 @@ The Project is split into three different modules, all add on python libaries ca
 	tqdm
 	prettytable
 	getpass
-	
-	
-	
-MySQL community server must be installed via the following [instructions](https://dev.mysql.com/doc/mysql-getting-started/en/)
-
-MongoDB must be installed and connected following these [instructions](https://docs.mongodb.com/manual/installation/#tutorial-installation)
 
 ### twitter_module.py
 
@@ -45,11 +43,14 @@ The first module interacts with the twitter API using a python wrapper,tweepy, i
 
 This module prompts the user to enter their MySQL credentials, and creates a database with the name 'useername_mysql_twitter_db', and if correct asks for a twitter handle to query. If a valid handle is entered twitter_module.get_all_tweets() is called.  Once all the pictures are downloaded the google vision API finds a list of labels for the pictures stored in 'pic_downloads_mysql/'.  It then uses the python API Pillow in order to resize all the images and caption them using the labels created from the google vision API.  Following picture labeling, it creates a table called 'twitter handle' in the database, where the picture filenames, captions and caption confidences are stored. It will continue to prompt the user to enter twitter handles, and create new database entries until 'ctl-d' is hit. Finally the program will exit showing a quck summary reguarding the newly created database.
 
-	
+![MYSQL example](https://raw.githubusercontent.com/astoycos/Mini_Project1/Mini_Project3/mysql_ex.png)
+
 
 ### vision_module_MONGODB.py 
 	
 This module prompts the user to enter a mongo database name, and creates a database with the name 'name_mongo_twitter_db', and if correct asks for a twitter handle to query. If a valid handle is entered twitter_module.get_all_tweets() is called.  Once all the pictures are downloaded the google vision API finds a list of labels for the pictures stored in 'pic_downloads_mongo/'.  It then uses the python API Pillow in order to resize all the images and caption them using the labels created from the google vision API.  Following picture labeling, it creates a collection called 'twitter handle' in the database, where the picture filenames, captions and caption confidences are stored as documents. It will continue to prompt the user to enter twitter handles, and create new database entries until 'ctl-d' is hit. Finally the program will exit showing a quck summary reguarding the newly created database.
+
+![MONGODB example](https://raw.githubusercontent.com/astoycos/Mini_Project1/Mini_Project3/mongo_ex.png)
 
 ### API.py
 
