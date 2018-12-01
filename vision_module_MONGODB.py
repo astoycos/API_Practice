@@ -20,7 +20,6 @@ import os
 import PIL
 from tqdm import tqdm
 import pymongo
-from bson.son import SON
 from getpass import getpass
 from PIL import ImageFont
 from PIL import Image
@@ -33,12 +32,12 @@ from prettytable import PrettyTable
 pic_directory = 'pic_directory_MONGODB/'
 
 
-#make MONGODB DATAbase 
-user = str(raw_input("Enter Mongo_DB user name: "))
+#make MONGODB DATAbase and  
+user = str(raw_input("Enter Mongo_DB username: "))
+
+pic_directory = 'pic_directory_MONGODB_' + user + '/'
 
 myclient = pymongo.MongoClient('localhost', 27017)
-
-dblist = myclient.list_database_names()
 
 dbname = user + '_mongo_twitter_db'
 
@@ -56,9 +55,10 @@ try:
 			#pass in the username of the account you want to download
 
 		try:
-			twitter_module.get_all_tweets(tw_hdl, int(numtweets),False)
+			twitter_module.get_all_tweets(tw_hdl, int(numtweets),False,user)
 		except:
 			print("Invalid twitter handle")
+			continue
 
 		#Make new table in database for 
 
@@ -139,7 +139,7 @@ try:
 			entry = {'$set' : {'filename':str(pics),'pic_caption':str(labels[0].description),'pic_caption_weight':str(labels[0].score)}}
 
 			mycol.update_many(filter,entry,upsert=True)
-	print('\n')
+		print('\n')
 
 except EOFError:
 	# on exit show some database statistics

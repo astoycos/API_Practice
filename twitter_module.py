@@ -23,8 +23,14 @@ access_key = "1039252626829963270-W7Fd0uWMmiKCC7Ox1Mnp6oagw1mwrb"
 access_secret = "yhZNSiLnQ723qJmktKXBwUaMs0rVgNBDk0QcE90PN9lMW"
 
 
-def get_all_tweets(screen_name, tweetnum):
+
+def get_all_tweets(screen_name, tweetnum, db,name):
     
+    if(db):
+        pic_directory = 'pic_directory_MYSQL_' + name + '/'
+    else: 
+        pic_directory = 'pic_directory_MONGODB_' + name +'/'
+
     #Twitter only allows access to a users most recent 3240 tweets with this method
     
     #authorize twitter, initialize tweepy
@@ -72,39 +78,20 @@ def get_all_tweets(screen_name, tweetnum):
         else:
             continue
     
-    print("%s pictures found" % (len(pictures)))
+    print("%s pictures found in %s tweets" % (len(pictures),tweetnum))
 
     #creates a folder to store the media in working directory, if it already exists remove it and rewrite 
-    if os.path.exists('pic_downloads/' + screen_name[1:]) : 
-        #shutil.rmtree('pic_downloads') 
-        #os.mkdir('pic_downloads'
+    if os.path.exists(pic_directory + screen_name[1:]) : 
         pass
     else:
-        os.makedirs('pic_downloads/' + screen_name[1:])
+        os.makedirs(pic_directory + screen_name[1:])
 
+    #only download pictures that havent been in database yet 
     for picture in pictures:
-        if os.path.exists('pic_downloads/' + screen_name[1:] + '/' + 'labeled_' + picture): 
+        if os.path.exists(pic_directory + screen_name[1:] + '/' + 'labeled_' + str(picture.rsplit('/',1)[1])): 
             #shutil.rmtree('pic_downloads')    
             #os.mkdir('pic_downloads'
             pass
         else:
-            wget.download(picture, ('pic_downloads/' + screen_name[1:] + '/'))
-
-
-
-'''        
-#can change account from which pictures are downloaded 
-if __name__ == '__main__':
-    #user input for number of tweets to be downloaded
-    try:
-        numtweets = int(input("Enter number of tweets to be downloaded (Must be 20 or more): "))
-    except ValueError:
-        print('\nYou did not enter a valid number')
-        sys.exit(0)
-    #pass in the username of the account you want to download
-    try:
-        get_all_tweets("@photoblggr", int(numtweets))
-    except:
-        print("Invalid twitter handle")
-'''
+            wget.download(picture, (pic_directory + screen_name[1:] + '/'))
 

@@ -3,6 +3,7 @@ import os
 import PIL
 from tqdm import tqdm
 import mysql.connector
+import pymongo
 from PIL import ImageFont
 from PIL import Image
 from PIL import ImageDraw
@@ -11,6 +12,7 @@ from prettytable import PrettyTable
 
 pic_directory_mongo = 'pic_directory_MONGODB/'
 
+# My_sql database API 
 class mysql_tweet: 
 
     def __init__(self,username,password,database):
@@ -82,17 +84,65 @@ class mysql_tweet:
                 pass
 
 
+#Mongo database API 
+class mongo_tweet:
 
+    def __init__(self,username):
+        self.user = username
+        self.pic_directory_mongo = 'pic_directory_MONGODB/'
+        self.myclient = pymongo.MongoClient('localhost', 27017)
+        self.database = username + '_mongo_twitter_db'
+        self.mydb = self.myclient[self.database]
+
+    def show_info(self):
+        print("Below is your " + self.database +" and the various twitter handles that were queryed ")
+
+        collist = self.mydb.list_collection_names()
+
+        tab = PrettyTable(['Twitter_Handles', '# of Pictures','Most Popular descriptor (word,count)'])
+        
+        for handles in collist:
+            coll = self.mydb[str(handles)]
+            for most_used in coll.aggregate([{"$sortByCount":"$pic_caption"},{"$limit":1}]):
+                tab.add_row([str(coll.name),str(coll.count()),(str(most_used["_id"]),most_used["count"])])
+        
+        print tab
+
+    def find_des(self,description): 
+        collist = self.mydb.list_collection_names()
+
+        for handles in collist:
+            coll = self.mydb[str(handles)]
+
+            find_filter = {'pic_caption':description}
+
+            cursor = coll.find(find_filter)
+
+            for documents in cursor:
+                print('Twitter Account : %s' % str(coll.name))
+
+                print('Picture: %s' % documents['filename'])
+
+                im = Image.open(self.pic_directory_mongo + str(coll.name) + '/labeled_' + str(documents['filename']))
+
+                im.show()
+
+'''
 if __name__ == '__main__':
 
-    database = mysql_tweet('root', 'password','root')
+    mysql_database = mysql_tweet('root', 'password','root')
 
-    database.show_info()
+    mysql_database.show_info()
 
-    database.find_des('rock')
+    mysql_database.find_des('wave')
 
+    mongo_database = mongo_tweet('andrew')
 
+    mongo_database.show_info()
 
+    mongo_database.find_des('wave')
+
+'''
 
 
 

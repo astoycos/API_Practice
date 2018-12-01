@@ -37,6 +37,9 @@ username = str(raw_input("Enter your MySQL username: "))
 
 incorrectpass = True
 
+pic_directory = 'pic_directory_MYSQL_' + username + '/'
+
+#if password is incorrect prompt user again 
 while(incorrectpass):
 	password = str(getpass("Enter your MySQl password: "))
 
@@ -55,13 +58,13 @@ while(incorrectpass):
 
 mycursor = mydb.cursor()
 
+#create new database if one does not exist 
 try: 
     mycursor.execute("USE " + database_name)
 except mysql.connector.Error as err:
 	mycursor.execute("CREATE DATABASE IF NOT EXISTS " + database_name)
 
 mydb.commit()
-# Get tweets 
 
 #continue prompting the user to get tweets and entries to database 
 try:
@@ -75,11 +78,12 @@ try:
 			#pass in the username of the account you want to download
 
 		try:
-			twitter_module.get_all_tweets(tw_hdl, int(numtweets),True)
+			twitter_module.get_all_tweets(tw_hdl, int(numtweets),True,username)
 		except:
 			print("Invalid twitter handle")
 
-		#Make new table in database for 
+
+		#Make new table in database correlating to twitter handle in question  
 
 		mydb = mysql.connector.connect(
 			user=username,
@@ -139,7 +143,7 @@ try:
 				imageFile = pic_directory + tw_hdl[1:] + '/' + pics
 				im1=Image.open(imageFile)
 				
-				#resize image so that all images approximately match in video 
+				#resize image so that all images approximately match  
 				basewidth = 600 
 				wpercent = (basewidth / float(im1.size[0]))
 				hsize = int((float(im1.size[1]) * float(wpercent)))
@@ -173,7 +177,7 @@ try:
 				mydb.commit()
 			except mysql.connector.errors.IntegrityError:
 				pass
-	print('\n')
+		print('\n')
 except EOFError:
 	# on exit show some database statistics
 	print('\n')
