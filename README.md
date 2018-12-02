@@ -54,11 +54,17 @@ This module prompts the user to enter a mongo database name, and creates a datab
 
 ### API.py
 
-This module provides an API to interact with the databases created by twitter_module.py and vision_module_MYSQL.py. It contains two main funtions, show_info() which shows some quick statistics about a database, and find_des(description) which allows the user to search the database for a specific picture caption. If a picture is found with the description, it will print the twitter handle it was downloaded from and then display the image. 
+This module provides an API to interact with the databases created by twitter_module.py and vision_module_MYSQL.py. For both database implementations it contains two main funtions, show_info() which shows some quick statistics about a database, and find_des(description) which allows the user to search the database for a specific picture caption. If a picture is found with the description, it will print the twitter handle it was downloaded from and then display the image. 
 
 a quick demo is provided in demo.py 
 
 
 ## DEMO
+
+This module is used to test the API and show the program running.  It populates two databases from datadumps included in the github. Following use of demo you can add to the databases using Vision_module_(MYSQL or MONGODB).py but If you would like to make new databases following demo use be sure to delete the ones used for the demo 
+
+The databases created by this program will be:
+	## Mongo -> user + '_mongo_twitter_db'
+	## MySQL -> username + '_mysql_twitter_db'
 
 **The only erroneous files in the github is a font file for the labels and a Readme

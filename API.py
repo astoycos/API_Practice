@@ -1,3 +1,5 @@
+#CopyRight 2018 Andrew Stoycos astoycos@bu.edu
+
 import io
 import os
 import PIL
@@ -13,19 +15,22 @@ from prettytable import PrettyTable
 pic_directory_mongo = 'pic_directory_MONGODB/'
 
 # My_sql database API 
-class mysql_tweet: 
 
-    def __init__(self,username,password,database):
+#create a MYSQL database query instance with username,password, and existing database name
+class mysql_tweet:
+
+    #initializer creates a mysql.connector database instance
+    def __init__(self,username,password):
         self.user = username
-        self.database = database
-        self.pic_directory_mysql = 'pic_directory_MYSQL/'
+        self.database = username + '_mysql_twitter_db'
+        self.pic_directory_mysql = 'pic_directory_MYSQL_'+ username + '/'
         self.mydb = mysql.connector.connect(
             user=username,
             passwd=password,
             database=username + "_mysql_twitter_db",
             auth_plugin='mysql_native_password'
         )
-        
+    #show info for a specific database in table format 
     def show_info(self):
         base_cursor = self.mydb.cursor()
         tab_cursor = self.mydb.cursor()
@@ -51,7 +56,8 @@ class mysql_tweet:
             info.add_row([str(table_name),str(tab_cursor.rowcount),str(commons)])
         print info
 
-    def find_des(self,description): 
+    #find images with a certain descriptor, and display them if show_images = True 
+    def find_des(self,description,show_images=False): 
         base_cursor = self.mydb.cursor()
         tab_cursor = self.mydb.cursor()
         data_cursor = self.mydb.cursor()
@@ -77,9 +83,10 @@ class mysql_tweet:
 
                     print('Picture: %s' % filename)
 
-                    im = Image.open(self.pic_directory_mysql + str(table_name) + '/labeled_' + str(filename))
+                    if show_images:
+                        im = Image.open(self.pic_directory_mysql + str(table_name) + '/labeled_' + str(filename))
 
-                    im.show()
+                        im.show()
             except:
                 pass
 
@@ -87,9 +94,10 @@ class mysql_tweet:
 #Mongo database API 
 class mongo_tweet:
 
+    #establish a connection to the local mongo database 
     def __init__(self,username):
         self.user = username
-        self.pic_directory_mongo = 'pic_directory_MONGODB/'
+        self.pic_directory_mongo = 'pic_directory_MONGODB_' + username + '/'
         self.myclient = pymongo.MongoClient('localhost', 27017)
         self.database = username + '_mongo_twitter_db'
         self.mydb = self.myclient[self.database]
@@ -108,8 +116,10 @@ class mongo_tweet:
         
         print tab
 
-    def find_des(self,description): 
+    def find_des(self,description,show_images=False): 
         collist = self.mydb.list_collection_names()
+
+        print('Finding pictures with the description: ' + description)
 
         for handles in collist:
             coll = self.mydb[str(handles)]
@@ -123,9 +133,11 @@ class mongo_tweet:
 
                 print('Picture: %s' % documents['filename'])
 
-                im = Image.open(self.pic_directory_mongo + str(coll.name) + '/labeled_' + str(documents['filename']))
+                if show_images:
+                    im = Image.open(self.pic_directory_mongo + str(coll.name) + '/labeled_' + str(documents['filename']))
 
-                im.show()
+                    im.show()
+                break
 
 '''
 if __name__ == '__main__':
