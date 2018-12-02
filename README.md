@@ -43,6 +43,8 @@ The Project is split into three different modules, all add on python libaries ca
 	prettytable
 	getpass
 
+To begin clone repository into local working directory and then continue reading 
+
 ## Module Descriptions
 
 ### twitter_module.py
@@ -79,5 +81,5 @@ The databases created by this program will be:
 	Mongo -> user + '_mongo_twitter_db'
 	MySQL -> username + '_mysql_twitter_db'
 
-**The only erroneous files in the github is a font file for the labels and a Readme
+**The only erroneous files in the github is a font file for the label,Readme,demo picture folders, and the demo database dumps
 **Sources are included in each Module file 
