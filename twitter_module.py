@@ -17,10 +17,10 @@ import shutil
 
 
 #Twitter API credentials
-consumer_key = "vSX8opPxEjU9YO9ZkdSjPdenL"
-consumer_secret = "VAs6VGJ3k0bqkcSrbN20zYHSP7ARcBhGCbCRtT3qPYRnnIMywI"
-access_key = "1039252626829963270-W7Fd0uWMmiKCC7Ox1Mnp6oagw1mwrb"
-access_secret = "yhZNSiLnQ723qJmktKXBwUaMs0rVgNBDk0QcE90PN9lMW"
+consumer_key = ""
+consumer_secret = ""
+access_key = ""
+access_secret = ""
 
 
 
