@@ -2,9 +2,7 @@
 
 This project was used as a way of gaining experience with both APIs(twitter and google vision) and relational(MySQL) and nonrelational(MongoDB) databases. It downloads pictures from a specified twitter handle and then labels them using the google Vision API. Then it saves the pictutes and accompying data in local intances of both Mysql and Mongo databases. Finally the provided API creates some basic functions to query these databases.
 
-## Module Descriptions
-
-### Prerequsites 
+## Prerequsites 
 
 This program was created using Python2.7, MySQL 8.0.13, and Mongo_DB 4.04
 
@@ -12,7 +10,19 @@ MySQL community server must be installed via the following [instructions](https:
 
 MongoDB must be installed and connected following these [instructions](https://docs.mongodb.com/manual/installation/#tutorial-installation)
 
-All credentials must be your own i.e twitter and google vision keys. For tweepy they can be manually entered at the heady of twitter_module.py, for google vision the user must run the following command line 
+All credentials must be your own i.e twitter and google vision keys. For tweepy they can be manually entered at the heady of twitter_module.py 
+
+For tweepy follow these [instructions](https://developer.twitter.com/en/docs/basics/authentication/guides/access-tokens.html) to generate access keys 
+
+Then edit twitter_module.py to enter the keys 
+	
+	#Twitter API credentials
+	consumer_key = " "
+	consumer_secret = " "
+	access_key = " "
+	access_secret = " "
+
+For google vision the user must run the following command line 
 		
 	- MAC -> export GOOGLE_APPLICATION_CREDENTIALS="[PATH]"
 	- PC -> $env:GOOGLE_APPLICATION_CREDENTIALS="[PATH]" 
@@ -32,6 +42,8 @@ The Project is split into three different modules, all add on python libaries ca
 	tqdm
 	prettytable
 	getpass
+
+## Module Descriptions
 
 ### twitter_module.py
 
@@ -59,9 +71,9 @@ This module provides an API to interact with the databases created by twitter_mo
 a quick demo is provided in demo.py 
 
 
-## DEMO
+### demo.py
 
-This module is used to test the API and show the program running.  It populates two databases from datadumps included in the github. Following use of demo you can add to the databases using Vision_module_(MYSQL or MONGODB).py but If you would like to make new databases following demo use be sure to delete the ones used for the demo 
+This module is used to test the API and show the program running. Before use make sure to download and unzip populated picture directoires (pic_directory_MONGODB_astoycos.zip) and (pic_directory_MYSQL_root.zip) in working directory. Demo.py populates two databases from datadumps included in the github (astoycos_mongo_twitter_db) and (mysql_twitter.sql). Following the use of demo.py you can add to the databases using Vision_module_(MYSQL or MONGODB).py but If you would like to make new databases from scratch following demo use be sure to delete the ones used for the demo 
 
 The databases created by this program will be:
 	Mongo -> user + '_mongo_twitter_db'
