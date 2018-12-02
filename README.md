@@ -64,7 +64,8 @@ a quick demo is provided in demo.py
 This module is used to test the API and show the program running.  It populates two databases from datadumps included in the github. Following use of demo you can add to the databases using Vision_module_(MYSQL or MONGODB).py but If you would like to make new databases following demo use be sure to delete the ones used for the demo 
 
 The databases created by this program will be:
-	## Mongo -> user + '_mongo_twitter_db'
-	## MySQL -> username + '_mysql_twitter_db'
+	Mongo -> user + '_mongo_twitter_db'
+	MySQL -> username + '_mysql_twitter_db'
 
 **The only erroneous files in the github is a font file for the labels and a Readme
+**Sources are included in each Module file 
