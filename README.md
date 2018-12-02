@@ -68,14 +68,14 @@ This module prompts the user to enter a mongo username, and creates a database w
 
 ### API.py
 
-This module provides an API to interact with the databases created by twitter_module.py and vision_module_MYSQL.py. For both database implementations it contains two main funtions, show_info() which shows some quick statistics about a database, and find_des(description) which allows the user to search the database for a specific picture caption. If a picture is found with the description, it will print the twitter handle it was downloaded from and then display the image. 
+This module provides an API to interact with the databases created by twitter_module.py and vision_module_MYSQL.py. For both database implementations it contains two main funtions, show_info() which shows some quick statistics about a database, and find_des(description,show_image) which allows the user to search the database for a specific picture caption. If a picture is found with the description, it will print the twitter handle it was downloaded from and if show_image=True it will also display the found images. The find_des will ony return one picture from each twitter handle, however there may be more than one picture with such a descriptor. If no pictures are found it will return nothing. 
 
 a quick demo is provided in demo.py 
 
 
 ### demo.py
 
-This module is used to test the API and show the program running. Before use make sure to download and unzip populated picture directoires (pic_directory_MONGODB_astoycos.zip) and (pic_directory_MYSQL_root.zip) in working directory. Demo.py populates two databases from datadumps included in the github (astoycos_mongo_twitter_db) and (mysql_twitter.sql). Following the use of demo.py you can add to the databases using Vision_module_(MYSQL or MONGODB).py but If you would like to make new databases from scratch following demo use be sure to delete the ones used for the demo 
+This module is used to test the API and show the program running. Before use make sure to download and unzip populated picture directoires (pic_directory_MONGODB_astoycos.zip) and (pic_directory_MYSQL_root.zip) in working directory. Demo.py populates two databases from datadumps included in the github (astoycos_mongo_twitter_db) and (mysql_twitter.sql). Following the use of demo.py you can add to the databases using Vision_module_(MYSQL or MONGODB).py but If you would like to make new databases from scratch following demo.py use be sure to delete the local databases and pic directories
 
 The databases created by this program will be:
 	Mongo -> user + '_mongo_twitter_db'
